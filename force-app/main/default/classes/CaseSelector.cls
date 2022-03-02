@@ -32,13 +32,13 @@ public inherited sharing class CaseSelector {
 
             caseRecord = Database.query(query.escapeJava());
         } catch (Exception ex) {
-            System.debug(LoggingLevel.ERROR, '__ [cls ' + CLASS_NAME + ' - ' + METHOD_NAME + '()] - ERROR: ' + ex.getLineNumber() + ' - ' + ex.getTypeName() + ' - ' + ex.getMessage());
+            System.debug(LoggingLevel.ERROR, 'ERRO ao buscar caso: ' + ex.getLineNumber() + ' - ' + ex.getTypeName() + ' - ' + ex.getMessage());
             throw new CaseSelectorException('Falha ao buscar Caso');
         }
 
         return caseRecord;
     }
-    
+
     public class CaseSelectorException extends Exception {
     }
 }

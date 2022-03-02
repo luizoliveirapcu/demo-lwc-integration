@@ -4,7 +4,7 @@ public with sharing class CardSelectorController {
     public static List<Map<String, Object>> fetchData(Map<String, Object> params) {
 
         validateParameters(params);
-        CaseSelector caseRecord = getCase((Id)params.get('recordId'));
+        Case caseRecord = getCase((Id)params.get('recordId'));
 
         List<CardListService.CreditCard> creditCardList = CardListService.getInstance().execute(caseRecord.AccountNumber__c, caseRecord.Document__c);
         List<Map<String, Object>> optionData = new List<Map<String, Object>>();
@@ -18,15 +18,13 @@ public with sharing class CardSelectorController {
         return optionData;
     }
 
-    private void validateParameters(Map<String, Object> params) {
+    private static void validateParameters(Map<String, Object> params) {
         Id recordId = (Id) params.get('recordId');
         if (recordId.getsobjecttype() != Schema.Case.getSObjectType()) {
-            throw new BoletoControllerException(
+            throw new AuraHandledException(
                 'O Id de registro recebido não se refere a um caso'
             );
         }
-
-        return recordId;
     }
 
     private static Case getCase(Id caseId) {
@@ -41,7 +39,7 @@ public with sharing class CardSelectorController {
             System.debug('Case encontrado: ' + caseRecord.Id);
             return caseRecord;
         } catch (Exception ex) {
-            debug.errorLog(ex, true);
+            System.debug(LoggingLevel.ERROR, 'ERRO ao buscar caso: ' + ex.getLineNumber() + ' - ' + ex.getTypeName() + ' - ' + ex.getMessage());
             throw new AuraHandledException('Falha ao buscar o caso');
         }
     }

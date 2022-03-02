@@ -4,9 +4,9 @@ public with sharing class CardSelectorController {
     public static List<Map<String, Object>> fetchData(Map<String, Object> params) {
 
         validateParameters(params);
-        CaseSelector caseRecord = CaseSelector.getInstance().getCaseWithId((Id)params.get('recordId'));
+        CaseSelector caseRecord = getCase((Id)params.get('recordId'));
 
-        List<CardListService.CreditCard> creditCardList = CardListService.getInstance().execute('123456', '09967782684');
+        List<CardListService.CreditCard> creditCardList = CardListService.getInstance().execute(caseRecord.AccountNumber__c, caseRecord.Document__c);
         List<Map<String, Object>> optionData = new List<Map<String, Object>>();
         
         for (CardListService.CreditCard creditCard : creditCardList) {
@@ -18,7 +18,7 @@ public with sharing class CardSelectorController {
         return optionData;
     }
 
-    public void validateParameters(Map<String, Object> params) {
+    private void validateParameters(Map<String, Object> params) {
         Id recordId = (Id) params.get('recordId');
         if (recordId.getsobjecttype() != Schema.Case.getSObjectType()) {
             throw new BoletoControllerException(
@@ -27,5 +27,22 @@ public with sharing class CardSelectorController {
         }
 
         return recordId;
+    }
+
+    private static Case getCase(Id caseId) {
+        System.debug(new Map<String, Object>{'caseId' => caseId});
+        try {
+            List<String> fieldsCase = new List<String>{
+                'AccountNumber__c',
+                'Document__c'
+            };
+
+            Case caseRecord = CaseSelector.getInstance().getCaseWithId(caseId, fieldsCase);
+            System.debug('Case encontrado: ' + caseRecord.Id);
+            return caseRecord;
+        } catch (Exception ex) {
+            debug.errorLog(ex, true);
+            throw new AuraHandledException('Falha ao buscar o caso');
+        }
     }
 }

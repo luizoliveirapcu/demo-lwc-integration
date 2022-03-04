@@ -15,6 +15,7 @@ export default class CardSelector extends LightningElement {
     }
 
     get getServiceError() {
+        console.log(this.errors);
         return 'Falha na execução do serviço. Entre em contato com o administrador'
     }
 

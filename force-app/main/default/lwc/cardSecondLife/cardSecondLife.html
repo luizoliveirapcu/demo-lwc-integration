@@ -1,0 +1,35 @@
+<template>
+    <lightning-card title={title} icon-name={iconName}>
+        <div class="center" if:true={isLoadingData}>
+            <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+            <br />
+        </div>
+
+        <div if:false={isLoadingData}>
+            <div class="slds-theme_default slds-m-left_medium" if:true={errors}>
+                <p>{getServiceError}</p>
+            </div>
+
+            <div class="slds-theme_default" if:false={errors}>
+                <div class="slds-p-left_large slds-p-right_large">
+                    <div class="slds-align_absolute-center">
+                        <p>
+                            {label}
+                        </p>
+                    </div>
+                    <br />
+                </div>
+
+                <div class="slds-align_absolute-center">
+                    <button
+                        disabled={disableButton}
+                        style = "width: 50%;"
+                        type="button"
+                        class="slds-button slds-button_brand"
+                        onclick={handleAction}
+                    >{buttonLabel}</button>
+                </div>
+            </div>
+        </div>
+    </lightning-card>
+</template>

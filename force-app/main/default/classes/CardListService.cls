@@ -82,6 +82,7 @@ public inherited sharing class CardListService {
         public String dataValidade;
         public String tipo;
         public String produto;
+        public Boolean permiteSegundaVia;
     }
 
     public class CardListServiceException extends Exception {

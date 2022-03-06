@@ -3,7 +3,7 @@ import fetchData from '@salesforce/apex/CardSelectorController.fetchData'
 import { publish, MessageContext } from 'lightning/messageService'
 import MESSAGECHANEL from '@salesforce/messageChannel/TransacionalDataChannel__c'
 
-const channelFilter = 'cardSelectedJson'
+const channelFilter = 'cardSelected'
 
 export default class CardSelector extends LightningElement {
     @api title

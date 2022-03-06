@@ -50,6 +50,11 @@ const columns = [
         label: 'Produto', 
         fieldName: 'produto', 
         type: 'TEXT'
+    },
+    { 
+        label: 'Permite Segunda Via', 
+        fieldName: 'permiteSegundaVia', 
+        type: 'TEXT'
     }
 ]
      

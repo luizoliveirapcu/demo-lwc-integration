@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>52.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>Solicitar segunda via de cartão</masterLabel>
+    <description>Solicita uma segunda via do cartão selecionado</description>
+    <targets>
+        <target>lightning__RecordPage</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__RecordPage">
+            <property name="title" label="Título" type="String" default="Informações" description="Título do componente."></property>
+            <property name="iconName" label="Ícone" type="String" description="Nome do ícone de acordo com o Lightning Design System."></property>
+            <property name="helpText" label="Texto de ajuda" type="String" description="Texto de ajuda para o entendimento do componente."></property>
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

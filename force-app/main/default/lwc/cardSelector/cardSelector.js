@@ -1,5 +1,9 @@
-import { api, LightningElement, track } from 'lwc'
+import { api, LightningElement, track, wire } from 'lwc'
 import fetchData from '@salesforce/apex/CardSelectorController.fetchData'
+import { publish, MessageContext } from 'lightning/messageService'
+import MESSAGECHANEL from '@salesforce/messageChannel/TransacionalDataChannel__c'
+
+const channelFilter = 'cardSelectedJson'
 
 export default class CardSelector extends LightningElement {
     @api title
@@ -9,9 +13,13 @@ export default class CardSelector extends LightningElement {
 
     @track selectedData
 
+    @wire(MessageContext)
+    messageContext
+
     errors
     isLoadingData = false
     data = []
+    channelFilter = channelFilter
 
     get hasData() {
         return this.data.length > 0
@@ -36,6 +44,8 @@ export default class CardSelector extends LightningElement {
 
     handleChange(event) {
         this.selectedData = event.detail.value
+        var obj = JSON.parse(this.selectedData)
+        this.sendData(obj)
     }
 
     getData() {
@@ -59,5 +69,14 @@ export default class CardSelector extends LightningElement {
             return
         }
         this.getData()
+    }
+
+    sendData(dataInfo) {
+        const message = {
+            recordId: this.recordId,
+            filter: this.channelFilter,
+            data: dataInfo
+        }
+        publish(this.messageContext, MESSAGECHANEL, message)
     }
 }

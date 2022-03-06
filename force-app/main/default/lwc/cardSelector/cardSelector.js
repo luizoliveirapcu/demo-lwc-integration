@@ -1,10 +1,13 @@
-import { api, wire, LightningElement } from 'lwc'
+import { api, LightningElement, track } from 'lwc'
 import fetchData from '@salesforce/apex/CardSelectorController.fetchData'
 
 export default class CardSelector extends LightningElement {
     @api title
     @api iconName
+    @api helpText
     @api recordId
+
+    @track selectedData
 
     errors
     isLoadingData = false
@@ -32,7 +35,7 @@ export default class CardSelector extends LightningElement {
     }
 
     handleChange(event) {
-        this.fiteredData = event.detail.value
+        this.selectedData = event.detail.value
     }
 
     getData() {
@@ -52,7 +55,7 @@ export default class CardSelector extends LightningElement {
     }
 
     renderedCallback() {
-        if (this.hasData) {
+        if (this.hasData || this.errors) {
             return
         }
         this.getData()

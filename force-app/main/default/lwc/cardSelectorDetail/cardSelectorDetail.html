@@ -1,0 +1,31 @@
+<template>
+    <lightning-card title={title} icon-name={iconName}>
+        <lightning-helptext slot="actions" content={helpText}></lightning-helptext>
+
+        <div class="center" if:true={isLoadingData}>
+            <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+            <br />
+        </div>
+
+        <div if:false={isLoadingData}>
+            <div class="slds-theme_default">
+                <div class="slds-theme_default slds-m-left_medium" if:true={errors}>
+                    <p>{getServiceError}</p>
+                </div>
+
+                <template if:false={errors}>
+                    <div class="slds-m-around_medium slds-form" role="list">
+                        <div class="slds-form__row">
+                            <template for:each={data} for:item="item" if:true={data}>
+                                <c-card-selector-detail-item
+                                    val={item}
+                                    key={item.id}
+                                ></c-card-selector-detail-item>
+                            </template>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </lightning-card>
+</template>

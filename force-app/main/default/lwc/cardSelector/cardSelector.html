@@ -1,5 +1,7 @@
 <template>
     <lightning-card title={title} icon-name={iconName}>
+        <lightning-helptext slot="actions" content={helpText}></lightning-helptext>
+        
         <div class="center" if:true={isLoadingData}>
             <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
         </div>
@@ -11,7 +13,7 @@
 
             <div if:true={hasData}>
                 <div class="slds-theme_default" if:false={errors}>
-                    <div class="slds-m-around_medium" if:false={selectedData}>
+                    <div class="slds-m-around_medium">
                         <p>Selecione um cartão</p>
 
                         <lightning-combobox
@@ -19,9 +21,16 @@
                             placeholder="Selecione uma opção"
                             options={options}
                             onchange={handleChange}
-                            value={fiteredData}
+                            value={selectedData}
                             spinner-active={isLoadingData}
                         ></lightning-combobox>
+                    </div>
+
+                    <div if:true={selectedData}>
+                        <c-card-selector-detail
+                            external-data={selectedData}
+                        >
+                        </c-card-selector-detail>
                     </div>
                 </div>
             </div>

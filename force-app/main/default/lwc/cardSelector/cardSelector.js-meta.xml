@@ -11,6 +11,7 @@
         <targetConfig targets="lightning__RecordPage">
             <property name="title" label="Título" type="String" default="Informações" description="Título do componente."></property>
             <property name="iconName" label="Ícone" type="String" description="Nome do ícone de acordo com o Lightning Design System."></property>
+            <property name="helpText" label="Texto de ajuda" type="String" description="Texto de ajuda para o entendimento do componente."></property>
         </targetConfig>
     </targetConfigs>
 </LightningComponentBundle>

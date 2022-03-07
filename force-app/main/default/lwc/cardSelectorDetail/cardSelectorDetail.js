@@ -111,6 +111,10 @@ export default class CardSelectorDetail extends LightningElement {
         }
     }
 
+    handleClearCard() {
+        this.dispatchEvent(new CustomEvent('clearselectedcard'));
+    }
+
     connectedCallback() {
         if (this.externalData != undefined) {
             this.getData()

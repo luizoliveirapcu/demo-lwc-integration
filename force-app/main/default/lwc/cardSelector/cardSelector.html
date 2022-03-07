@@ -1,7 +1,7 @@
 <template>
     <lightning-card title={title} icon-name={iconName}>
         <lightning-helptext slot="actions" content={helpText}></lightning-helptext>
-        
+
         <div class="center" if:true={isLoadingData}>
             <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
         </div>
@@ -29,6 +29,7 @@
                     <div if:true={selectedData}>
                         <c-card-selector-detail
                             external-data={selectedData}
+                            onclearselectedcard={handleClearCard}
                         >
                         </c-card-selector-detail>
                     </div>

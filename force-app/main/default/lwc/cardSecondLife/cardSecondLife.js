@@ -1,6 +1,8 @@
 import { LightningElement, api, wire } from 'lwc';
 import { subscribe, APPLICATION_SCOPE, MessageContext } from 'lightning/messageService'
 import MESSAGECHANEL from '@salesforce/messageChannel/TransacionalDataChannel__c'
+import { ShowToastEvent } from 'lightning/platformShowToastEvent'
+import doAction from '@salesforce/apex/CardSecondLifeController.doAction'
 
 const channelFilter = 'cardSelected'
 
@@ -28,11 +30,7 @@ export default class CardSecondLife extends LightningElement {
     }
 
     get disableButton() {
-        if(!this.selectedCard) {
-            return true
-        }
-
-        return !this.selectedCard.permiteSegundaVia
+        return !this.selectedCard || !this.selectedCard.permiteSegundaVia
     }
 
     get label() {
@@ -71,6 +69,44 @@ export default class CardSecondLife extends LightningElement {
             console.log('menssagem recebida: ' + this.params.receivedMessage)
             this.isLoadingData = false
         }
+    }
+
+    handleAction(event) {
+        this.isLoadingData = true
+        doAction({
+            params: this.params
+        })
+            .then((result) => {
+                if (result != undefined && result.success != undefined) {
+                    this.dispatchEvent(
+                        new ShowToastEvent({
+                            title: 'Sucesso',
+                            message: result.success,
+                            variant: 'success'
+                        })
+                    )
+                } else {
+                    this.dispatchEvent(
+                        new ShowToastEvent({
+                            title: 'Erro',
+                            message: result.error,
+                            variant: 'error'
+                        })
+                    )
+                }
+            })
+            .catch((_err) => {
+                this.dispatchEvent(
+                    new ShowToastEvent({
+                        title: 'Erro',
+                        message: _err.body.message,
+                        variant: 'error'
+                    })
+                )
+            })
+            .finally(() => {
+                this.isLoadingData = false
+            })
     }
 
     renderedCallback() {

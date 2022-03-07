@@ -6,10 +6,10 @@ public with sharing class CardSelectorController {
         validateParameters(params);
         Case caseRecord = getCase((Id)params.get('recordId'));
 
-        List<CardListService.CreditCard> creditCardList = CardListService.getInstance().execute(caseRecord.AccountNumber__c, caseRecord.Document__c);
+        List<CreditCard> creditCardList = CardListService.getInstance().execute(caseRecord.AccountNumber__c, caseRecord.Document__c);
         List<Map<String, Object>> optionData = new List<Map<String, Object>>();
         
-        for (CardListService.CreditCard creditCard : creditCardList) {
+        for (CreditCard creditCard : creditCardList) {
             optionData.add(new Map<String, Object>{ 'label' => creditCard.numeroMascarado, 'value' => JSON.serialize(creditCard) });
         }
 

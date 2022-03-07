@@ -1,21 +1,21 @@
-public inherited sharing class CardListService {
+public inherited sharing class CardSecondLifeService {
     
-    private static CardListService instance {
+    private static CardSecondLifeService instance {
         get {
             if(instance == null) {
-                instance = new CardListService();
+                instance = new CardSecondLifeService();
             }
             return instance;
         }
         private set;
     }
 
-    public static CardListService getInstance() {
+    public static CardSecondLifeService getInstance() {
         return instance;
     }
 
-    public List<CreditCard> execute(String contaCorrente, String cpfCnpj) {
-        validateParameters(contaCorrente, cpfCnpj);
+    public Success execute(String contaCorrente, String cpfCnpj, CreditCard card) {
+        validateParameters(contaCorrente, cpfCnpj, card);
 
         Map<String, String> headers = new Map<String, String>();
         headers.put('contaCorrente', contaCorrente);
@@ -24,8 +24,8 @@ public inherited sharing class CardListService {
         HttpResponse response = RestIntegration.getInstance().executeCallout(
             'GET',
             'https://7d3ff44a-0b94-4fbf-b70e-9d7a0d667eec.mock.pstmn.io',
-            '/meios-pagamentos/v1/cartoes',
-            null,
+            '/meios-pagamentos/v1/cartoes/segundavia',
+            JSON.serialize(card),
             headers
         );
 
@@ -34,16 +34,22 @@ public inherited sharing class CardListService {
         return parseSuccess(response);
     }
 
-    private void validateParameters(String contaCorrente, String cpfCnpj) {
+    private void validateParameters(String contaCorrente, String cpfCnpj, CreditCard card) {
         if(String.isBlank(contaCorrente)) {
-            throw new CardListServiceException(
+            throw new CardSecondLifeServiceException(
                 'ERRO DE SERVIÇO: (o parâmetro contaCorrente é requerido)'
             );
         }
 
         if(String.isBlank(cpfCnpj)) {
-            throw new CardListServiceException(
+            throw new CardSecondLifeServiceException(
                 'ERRO DE SERVIÇO: (o parâmetro cpfCnpj é requerido)'
+            );
+        }
+
+        if(card == null) {
+            throw new CardSecondLifeServiceException(
+                'ERRO DE SERVIÇO: (o parâmetro card é requerido)'
             );
         }
     }
@@ -55,7 +61,7 @@ public inherited sharing class CardListService {
         Boolean isValidResponse = statusCode == 200;
 
         if(!isValidResponse) {
-            throw new CardListServiceException(
+            throw new CardSecondLifeServiceException(
                 String.format(
                     'ERRO DE SERVIÇO: ({0}) {1}',
                     new List<Object>{ response.getStatusCode(), response.getStatus() }
@@ -66,13 +72,20 @@ public inherited sharing class CardListService {
         return isValidResponse;
     }
 
-    private List<CreditCard> parseSuccess(HttpResponse response) {
-        return (List<CreditCard>) JSON.deserialize(
+    private Success parseSuccess(HttpResponse response) {
+        Success successResponse = (Success) JSON.deserialize(
             response.getBody(),
-            List<CreditCard>.class
+            Success.class
         );
+
+        System.debug(new Map<String, Object>{ 'successResponse' => successResponse });
+        return successResponse;
     }
 
-    public class CardListServiceException extends Exception {
+    public class Success {
+        public String mensagem;
+    }
+
+    public class CardSecondLifeServiceException extends Exception {
     }
 }

@@ -64,11 +64,9 @@ export default class CardSelector extends LightningElement {
             })
     }
 
-    renderedCallback() {
-        if (this.hasData || this.errors) {
-            return
-        }
-        this.getData()
+    handleClearCard() {
+        this.selectedData = undefined
+        this.sendData(null)
     }
 
     sendData(dataInfo) {
@@ -78,5 +76,12 @@ export default class CardSelector extends LightningElement {
             data: dataInfo
         }
         publish(this.messageContext, MESSAGECHANEL, message)
+    }
+
+    renderedCallback() {
+        if (this.hasData || this.errors) {
+            return
+        }
+        this.getData()
     }
 }

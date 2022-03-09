@@ -27,6 +27,12 @@ public with sharing class RestIntegration {
             request.setHeader(headerKey, headers.get(headerKey));
         }
 
+        System.debug(new Map<String, Object>{ 'method' => method });
+        System.debug(new Map<String, Object>{ 'endpoint' => endpoint });
+        System.debug(new Map<String, Object>{ 'path' => path });
+        System.debug(new Map<String, Object>{ 'body' => body });
+        System.debug(new Map<String, Object>{ 'headers' => headers });
+
         return validateResponse(new Http().send(request));
     }
 

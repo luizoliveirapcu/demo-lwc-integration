@@ -10,6 +10,10 @@ Foram criados 5 componentes com diferentes níveis de relacionamento para contem
 
 Esse componente é o mais alto na hieraquia de relecionamento, então vamos chamá-lo de componente "Pai". Assim que que a tela interage com esse componente, o método `renderedCallback` é invocado, ele por sua vez invoca o método `getData` que faz uma requisição ao servidor por meio da classe `CardSelectorController` para buscar os cartões que serão exibidos na tela para seleção.
 
+Ao selecionar um cartão na lista, a propriedade `selectedData` é preechida com os dados do cartão selecionado. Além disso esses dados são publicados no canal de comunicação `(Lightning Message Channel)` que criamos com o nome `TransacionalDataChannel`.
+
+Quando a propriedade `selectedData` está preenchida, o componente `cardSelectorDetail` que aqui chamaremos de "filho" é exibido e recebe esse dado na sua propriedade pública `externalData`.
+
 #### Classe CardSelectorController
 
 O método `fetchData` que é invocado pelo LWC, faz uma query no próprio Salesforce para buscar alguns campos do objeto `Case` e em seguida utiliza esses campos como parâmetro para invocar uma API externa por meio da classe `CardListService` que irá retornar a lista de cartões.
